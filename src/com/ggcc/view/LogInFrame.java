@@ -134,6 +134,8 @@ public class LogInFrame extends JFrame {
 					.addGap(19))
 		);
 		contentPane.setLayout(gl_contentPane);
+		//set the JFrame to be centered
+		this.setLocationRelativeTo(null);
 	}
 	
 	/**
@@ -157,7 +159,9 @@ public class LogInFrame extends JFrame {
 			con = dbUtil.GetCon();
 			User currentUser = userDao.login(con, user);
 			if(currentUser != null){
-				JOptionPane.showMessageDialog(null,"Login Succeess");
+				//JOptionPane.showMessageDialog(null,"Login Succeess");
+				dispose();
+				new MainFrame().setVisible(true);
 			}else{
 				JOptionPane.showMessageDialog(null,"Invalid user name or password");
 			}

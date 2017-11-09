@@ -9,7 +9,7 @@ import java.sql.DriverManager;
 public class DbUtil {
 	private String dbUrl="jdbc:mysql://localhost:3306/db_library"; 
 	private String dbUserName="root"; 
-	private String dbPassword="1234567890"; 
+	private String dbPassword="NIni"; 
 	private String jdbcName="com.mysql.jdbc.Driver"; 
 	
 	/**
@@ -18,6 +18,7 @@ public class DbUtil {
 	 * @throws Exception
 	 */
 	public Connection GetCon()throws Exception{
+		//Returns the Class object related to the given string name
 		Class.forName(jdbcName);
 		Connection con = DriverManager.getConnection(dbUrl, dbUserName, dbPassword);
 		return con;
