@@ -55,6 +55,13 @@ public class MainFrame extends JFrame {
 		mnNewMenu.add(mnNewMenu_2);
 		
 		JMenuItem mntmAddGenres = new JMenuItem("Add Genres");
+		mntmAddGenres.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				BookGenreAddInterFrm bookGenreAddInterFrm = new BookGenreAddInterFrm();
+				bookGenreAddInterFrm.setVisible(true);
+				desktopPane.add(bookGenreAddInterFrm);
+			}
+		});
 		mntmAddGenres.setIcon(new ImageIcon(MainFrame.class.getResource("/images/add.png")));
 		mnNewMenu_2.add(mntmAddGenres);
 		

@@ -159,7 +159,7 @@ public class LogInFrame extends JFrame {
 			con = dbUtil.GetCon();
 			User currentUser = userDao.login(con, user);
 			if(currentUser != null){
-				//JOptionPane.showMessageDialog(null,"Login Succeess");
+				//JOptionPane.showMessageDialog(null,"Login Success");
 				dispose();
 				new MainFrame().setVisible(true);
 			}else{
