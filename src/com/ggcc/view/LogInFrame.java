@@ -167,8 +167,13 @@ public class LogInFrame extends JFrame {
 			}
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		
+			e1.printStackTrace();		
+		}finally{
+			try{
+			dbUtil.closeConnection(con);
+			}catch(Exception e1){
+				e1.printStackTrace();
+			}				
 		}
 	}
 
