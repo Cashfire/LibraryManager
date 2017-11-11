@@ -25,9 +25,13 @@ import java.awt.event.ActionEvent;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 import javax.swing.JTextArea;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class BookGenreManagementInterFrm extends JInternalFrame {
 	private JTable bookGenreTable;
+	
+	private JTextArea bookGenreDescTxt;
 	
 	private DbUtil dbUtil = new DbUtil();
 	private BookGenreDao bookGenreDao = new BookGenreDao();
@@ -121,7 +125,7 @@ public class BookGenreManagementInterFrm extends JInternalFrame {
 		
 		JLabel lblDescription = new JLabel("Description:");
 		
-		JTextArea bookGenreDescTxt = new JTextArea();
+		bookGenreDescTxt = new JTextArea();
 		
 		JButton btnModify = new JButton("Modify");
 		btnModify.setIcon(new ImageIcon(BookGenreManagementInterFrm.class.getResource("/images/modify.png")));
@@ -174,6 +178,12 @@ public class BookGenreManagementInterFrm extends JInternalFrame {
 		panel.setLayout(gl_panel);
 		
 		bookGenreTable = new JTable();
+		bookGenreTable.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				bookGenreTableMousePressed(e);
+			}
+		});
 		bookGenreTable.setModel(new DefaultTableModel(
 			new Object[][] {
 			},
@@ -196,7 +206,17 @@ public class BookGenreManagementInterFrm extends JInternalFrame {
 		
 		this.fillTable(new BookGenre()); //call fillTable function with a null object
 	}
-	
+		/**
+		 * Event handler of clicking a row in the bookGenreTable
+		 * @param e
+		 */
+		private void bookGenreTableMousePressed(MouseEvent evt) {
+			int row = bookGenreTable.getSelectedRow();
+			idTxt.setText((String) bookGenreTable.getValueAt(row, 0));
+			bookGenreNameTxt.setText((String) bookGenreTable.getValueAt(row, 1)); 
+			bookGenreDescTxt.setText((String) bookGenreTable.getValueAt(row, 2)); 
+	}
+
 		/**
 		 * Book genre search event handler
 		 * @param evt
