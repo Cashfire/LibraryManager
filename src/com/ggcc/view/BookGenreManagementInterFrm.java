@@ -103,7 +103,7 @@ public class BookGenreManagementInterFrm extends JInternalFrame {
 				con = dbUtil.GetCon();
 				//
 				ResultSet rs = bookGenreDao.list(con, bookGenre);
-				System.out.println(rs);
+				//By moving the cursor of the result set rs, we get each vector to add to each dtm row
 				while(rs.next()){
 					Vector<String> v = new Vector<String>(); //a Vector is like dynamic size array
 					v.add(rs.getString("id"));//get the "id" value of the current row

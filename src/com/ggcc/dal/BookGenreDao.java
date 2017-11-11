@@ -35,7 +35,6 @@ public class BookGenreDao {
 		}
 		//If bookGenre.getBookGenreName is null, then sb will be "select * from t_bookgenre".
 		PreparedStatement pstmt = con.prepareStatement(sb.toString().replaceFirst("and", "where"));
-		System.out.println(sb.toString().replaceFirst("and", "where"));
 		return pstmt.executeQuery();
 	}
 }
