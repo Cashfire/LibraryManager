@@ -37,4 +37,34 @@ public class BookGenreDao {
 		PreparedStatement pstmt = con.prepareStatement(sb.toString().replaceFirst("and", "where"));
 		return pstmt.executeQuery();
 	}
+	
+	/**
+	 * Delete a book genre
+	 * @param con
+	 * @param id
+	 * @return
+	 * @throws Exception
+	 */
+	public int delete(Connection con, String id)throws Exception{
+		String sql = "delect from t_bookGenre where id=?";
+		PreparedStatement pstmt = con.prepareStatement(sql);
+		pstmt.setString(1, id);
+		return pstmt.executeUpdate();
+	}
+	
+	/**
+	 * Modify the book genre
+	 * @param con
+	 * @param bookGenre
+	 * @return
+	 * @throws Exception
+	 */
+	public int update(Connection con, BookGenre bookGenre)throws Exception{
+		String sql = "update t_bookGenre where bookGenreNmae=?,bookGenreDesc=? where id=?";
+		PreparedStatement pstmt = con.prepareStatement(sql);
+		pstmt.setString(1, bookGenre.getBookGenreName());
+		pstmt.setString(2, bookGenre.getBookGenreDesc());
+		pstmt.setInt(3, bookGenre.getId());
+		return pstmt.executeUpdate();
+	}
 }

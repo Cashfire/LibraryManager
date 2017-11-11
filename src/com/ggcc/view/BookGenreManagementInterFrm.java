@@ -16,12 +16,24 @@ import javax.swing.table.DefaultTableModel;
 import com.ggcc.dal.BookGenreDao;
 import com.ggcc.model.BookGenre;
 import com.ggcc.util.DbUtil;
+import javax.swing.JTextField;
+import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.JButton;
+import javax.swing.ImageIcon;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.JPanel;
+import javax.swing.border.TitledBorder;
+import javax.swing.JTextArea;
 
 public class BookGenreManagementInterFrm extends JInternalFrame {
 	private JTable bookGenreTable;
 	
 	private DbUtil dbUtil = new DbUtil();
 	private BookGenreDao bookGenreDao = new BookGenreDao();
+	private JTextField s_bookGenreNameTxt;
+	private JTextField idTxt;
+	private JTextField bookGenreNameTxt;
 	/**
 	 * Launch the application.
 	 */
@@ -46,24 +58,120 @@ public class BookGenreManagementInterFrm extends JInternalFrame {
 		setIconifiable(true);
 		setRootPaneCheckingEnabled(false);
 		setTitle("Book Genre Management");
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 450, 402);
 		
 		JScrollPane scrollPane = new JScrollPane();
+		
+		JLabel lblBookGenreName = new JLabel("Book genre name: ");
+		
+		s_bookGenreNameTxt = new JTextField();
+		s_bookGenreNameTxt.setColumns(10);
+		
+		JButton btnNewButton = new JButton("Search");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				bookGenreSearchActionPerformed(e);
+			}
+		});
+		btnNewButton.setIcon(new ImageIcon(BookGenreManagementInterFrm.class.getResource("/images/search.png")));
+		
+		JPanel panel = new JPanel();
+		panel.setBorder(new TitledBorder(null, "Table Operation", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(69)
-					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 280, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(85, Short.MAX_VALUE))
+					.addGap(35)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addComponent(lblBookGenreName)
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(s_bookGenreNameTxt, GroupLayout.PREFERRED_SIZE, 114, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(btnNewButton, GroupLayout.DEFAULT_SIZE, 85, Short.MAX_VALUE))
+						.addComponent(scrollPane, 0, 0, Short.MAX_VALUE)
+						.addComponent(panel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+					.addGap(72))
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(63)
-					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(79, Short.MAX_VALUE))
+					.addGap(16)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblBookGenreName)
+						.addComponent(s_bookGenreNameTxt, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnNewButton))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 115, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 175, GroupLayout.PREFERRED_SIZE)
+					.addGap(19))
 		);
+		
+		JLabel lblId = new JLabel("id:");
+		
+		JLabel lblBookGenreName_1 = new JLabel("Book genre name:");
+		
+		idTxt = new JTextField();
+		idTxt.setEditable(false);
+		idTxt.setColumns(10);
+		
+		bookGenreNameTxt = new JTextField();
+		bookGenreNameTxt.setColumns(10);
+		
+		JLabel lblDescription = new JLabel("Description:");
+		
+		JTextArea bookGenreDescTxt = new JTextArea();
+		
+		JButton btnModify = new JButton("Modify");
+		btnModify.setIcon(new ImageIcon(BookGenreManagementInterFrm.class.getResource("/images/modify.png")));
+		
+		JButton btnDelet = new JButton("Delete");
+		btnDelet.setIcon(new ImageIcon(BookGenreManagementInterFrm.class.getResource("/images/delete.png")));
+		GroupLayout gl_panel = new GroupLayout(panel);
+		gl_panel.setHorizontalGroup(
+			gl_panel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_panel.createSequentialGroup()
+							.addComponent(lblId)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(idTxt, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)
+							.addGap(24)
+							.addComponent(lblBookGenreName_1)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(bookGenreNameTxt, GroupLayout.DEFAULT_SIZE, 97, Short.MAX_VALUE))
+						.addGroup(gl_panel.createSequentialGroup()
+							.addComponent(lblDescription)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(bookGenreDescTxt, GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE))
+						.addGroup(gl_panel.createSequentialGroup()
+							.addComponent(btnModify)
+							.addPreferredGap(ComponentPlacement.RELATED, 104, Short.MAX_VALUE)
+							.addComponent(btnDelet)))
+					.addContainerGap())
+		);
+		gl_panel.setVerticalGroup(
+			gl_panel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblId)
+						.addComponent(lblBookGenreName_1)
+						.addComponent(bookGenreNameTxt, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(idTxt, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(18)
+					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblDescription)
+						.addComponent(bookGenreDescTxt, GroupLayout.PREFERRED_SIZE, 62, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(btnModify)
+						.addComponent(btnDelet))
+					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+		);
+		panel.setLayout(gl_panel);
 		
 		bookGenreTable = new JTable();
 		bookGenreTable.setModel(new DefaultTableModel(
@@ -88,6 +196,19 @@ public class BookGenreManagementInterFrm extends JInternalFrame {
 		
 		this.fillTable(new BookGenre()); //call fillTable function with a null object
 	}
+	
+		/**
+		 * Book genre search event handler
+		 * @param evt
+		 */
+		private void bookGenreSearchActionPerformed(ActionEvent evt) {
+			String s_bookGenreName = s_bookGenreNameTxt.getText();
+			BookGenre bookGenre = new BookGenre();
+			bookGenre.setBookGenreName(s_bookGenreName);
+			this.fillTable(bookGenre);
+		
+	}
+
 		/**
 		 * Initiate the table (clear the set of search result)
 		 * @param bookGenre
