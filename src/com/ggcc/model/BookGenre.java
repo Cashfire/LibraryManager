@@ -21,6 +21,12 @@ public class BookGenre {
 		this.bookGenreDesc = bookGenreDesc;
 	}
 
+	public BookGenre(int id, String bookGenreName, String bookGenreDesc) {
+		super();
+		this.id = id;
+		this.bookGenreName = bookGenreName;
+		this.bookGenreDesc = bookGenreDesc;
+	}
 
 	public int getId() {
 		return id;

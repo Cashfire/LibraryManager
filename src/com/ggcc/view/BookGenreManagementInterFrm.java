@@ -10,12 +10,15 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JScrollPane;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import com.ggcc.dal.BookGenreDao;
 import com.ggcc.model.BookGenre;
 import com.ggcc.util.DbUtil;
+import com.ggcc.util.StringUtil;
+
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JButton;
@@ -128,6 +131,11 @@ public class BookGenreManagementInterFrm extends JInternalFrame {
 		bookGenreDescTxt = new JTextArea();
 		
 		JButton btnModify = new JButton("Modify");
+		btnModify.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				bookGenreModifyActionEvent(e);
+			}
+		});
 		btnModify.setIcon(new ImageIcon(BookGenreManagementInterFrm.class.getResource("/images/modify.png")));
 		
 		JButton btnDelet = new JButton("Delete");
@@ -206,6 +214,42 @@ public class BookGenreManagementInterFrm extends JInternalFrame {
 		
 		this.fillTable(new BookGenre()); //call fillTable function with a null object
 	}
+		
+		private void bookGenreModifyActionEvent(ActionEvent evt) {
+			String id = idTxt.getText();
+			String bookGenreName = bookGenreNameTxt.getText();
+			String bookGenreDesc = bookGenreDescTxt.getText();
+			//if the user didn't click any row above
+			if(StringUtil.isEmpty(id)){
+				JOptionPane.showMessageDialog(null, "Please choose the row you want to modify.");
+				return;
+			}
+			BookGenre bookGenre = new BookGenre(Integer.parseInt(id), bookGenreName, bookGenreDesc);		
+			Connection con = null;
+			try{
+				con = dbUtil.GetCon();
+				//update the t_bookGenre in SQL
+				int modifyNum = bookGenreDao.update(con, bookGenre);
+				if(modifyNum ==1){
+					JOptionPane.showMessageDialog(null, "Modify Success");
+					//also update the bookGenreTable in the scrollPane above
+					this.resetValue(); 
+					this.fillTable(new BookGenre());
+				}else{
+					JOptionPane.showMessageDialog(null, "Modify failure");
+				}
+			}catch(Exception e){
+				e.printStackTrace();
+			}finally{
+				try {
+					dbUtil.closeConnection(con);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+	}
+
 		/**
 		 * Event handler of clicking a row in the bookGenreTable
 		 * @param e
@@ -230,7 +274,7 @@ public class BookGenreManagementInterFrm extends JInternalFrame {
 	}
 
 		/**
-		 * Initiate the table (clear the set of search result)
+		 * Initiate the bookGenreTable in the scrollPane(clear the set of search result)
 		 * @param bookGenre
 		 */
 		private void fillTable(BookGenre bookGenre){
@@ -242,7 +286,7 @@ public class BookGenreManagementInterFrm extends JInternalFrame {
 			Connection con= null;
 			try{
 				con = dbUtil.GetCon();
-				//
+				//execute pstmt to get the result set of the table we want from sql
 				ResultSet rs = bookGenreDao.list(con, bookGenre);
 				//By moving the cursor of the result set rs, we get each vector to add to each dtm row
 				while(rs.next()){
@@ -263,4 +307,14 @@ public class BookGenreManagementInterFrm extends JInternalFrame {
 				}	
 			}
 		}
+		
+		/**
+		 * clear the bookGenreTable in the scrollPane above
+		 */
+		private void resetValue(){
+			this.idTxt.setText("");
+			this.bookGenreNameTxt.setText("");
+			this.bookGenreDescTxt.setText("");
+		}
+		
 }

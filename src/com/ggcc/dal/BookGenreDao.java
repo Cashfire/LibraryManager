@@ -60,7 +60,7 @@ public class BookGenreDao {
 	 * @throws Exception
 	 */
 	public int update(Connection con, BookGenre bookGenre)throws Exception{
-		String sql = "update t_bookGenre where bookGenreNmae=?,bookGenreDesc=? where id=?";
+		String sql = "update t_bookGenre set bookGenreName=?,bookGenreDesc=? where id=?";
 		PreparedStatement pstmt = con.prepareStatement(sql);
 		pstmt.setString(1, bookGenre.getBookGenreName());
 		pstmt.setString(2, bookGenre.getBookGenreDesc());
