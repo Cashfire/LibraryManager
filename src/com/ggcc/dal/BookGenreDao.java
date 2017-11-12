@@ -46,7 +46,7 @@ public class BookGenreDao {
 	 * @throws Exception
 	 */
 	public int delete(Connection con, String id)throws Exception{
-		String sql = "delect from t_bookGenre where id=?";
+		String sql = "delete from t_bookGenre where id=?";
 		PreparedStatement pstmt = con.prepareStatement(sql);
 		pstmt.setString(1, id);
 		return pstmt.executeUpdate();

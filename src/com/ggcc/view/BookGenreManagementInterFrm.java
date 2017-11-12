@@ -139,6 +139,11 @@ public class BookGenreManagementInterFrm extends JInternalFrame {
 		btnModify.setIcon(new ImageIcon(BookGenreManagementInterFrm.class.getResource("/images/modify.png")));
 		
 		JButton btnDelet = new JButton("Delete");
+		btnDelet.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				bookGenreDeleteActionEvent(e);
+			}
+		});
 		btnDelet.setIcon(new ImageIcon(BookGenreManagementInterFrm.class.getResource("/images/delete.png")));
 		GroupLayout gl_panel = new GroupLayout(panel);
 		gl_panel.setHorizontalGroup(
@@ -214,7 +219,48 @@ public class BookGenreManagementInterFrm extends JInternalFrame {
 		
 		this.fillTable(new BookGenre()); //call fillTable function with a null object
 	}
+	
+		/**
+		 * event handler of deleting the book genre
+		 * @param e
+		 */
+		protected void bookGenreDeleteActionEvent(ActionEvent evt) {
+			String id = idTxt.getText();
+			if(StringUtil.isEmpty(id)){
+				JOptionPane.showMessageDialog(null, "Please choose the row you want to delete.");
+				return;
+			}
+			int n = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this item?");
+			if(n==0){
+				Connection con = null;
+				try{
+					con = dbUtil.GetCon();
+					int deletNum = bookGenreDao.delete(con, id);
+					if(deletNum == 1){
+						JOptionPane.showMessageDialog(null, "Delete success");
+						this.resetValue();
+						this.fillTable(new BookGenre());
+					}else{
+						JOptionPane.showMessageDialog(null, "Delete failure");
+					}
+				}catch(Exception e){
+					e.printStackTrace();
+					JOptionPane.showMessageDialog(null, "Delete failure");
+				}finally{
+					try {
+						dbUtil.closeConnection(con);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+	}
 		
+		/**
+		 * event handler of modifying he book genre
+		 * @param evt
+		 */
 		private void bookGenreModifyActionEvent(ActionEvent evt) {
 			String id = idTxt.getText();
 			String bookGenreName = bookGenreNameTxt.getText();
@@ -222,6 +268,10 @@ public class BookGenreManagementInterFrm extends JInternalFrame {
 			//if the user didn't click any row above
 			if(StringUtil.isEmpty(id)){
 				JOptionPane.showMessageDialog(null, "Please choose the row you want to modify.");
+				return;
+			}
+			if(StringUtil.isEmpty(bookGenreName)){
+				JOptionPane.showMessageDialog(null, "Invalid book genre name");
 				return;
 			}
 			BookGenre bookGenre = new BookGenre(Integer.parseInt(id), bookGenreName, bookGenreDesc);		
@@ -240,6 +290,7 @@ public class BookGenreManagementInterFrm extends JInternalFrame {
 				}
 			}catch(Exception e){
 				e.printStackTrace();
+				JOptionPane.showMessageDialog(null, "Modify failure");
 			}finally{
 				try {
 					dbUtil.closeConnection(con);
@@ -286,7 +337,7 @@ public class BookGenreManagementInterFrm extends JInternalFrame {
 			Connection con= null;
 			try{
 				con = dbUtil.GetCon();
-				//execute pstmt to get the result set of the table we want from sql
+				//Note: when the bookGenre is null, list() will select all from the sql table
 				ResultSet rs = bookGenreDao.list(con, bookGenre);
 				//By moving the cursor of the result set rs, we get each vector to add to each dtm row
 				while(rs.next()){
