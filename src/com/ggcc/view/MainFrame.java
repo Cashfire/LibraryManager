@@ -81,10 +81,24 @@ public class MainFrame extends JFrame {
 		mnNewMenu.add(mnNewMenu_3);
 		
 		JMenuItem mntmAddBook = new JMenuItem("Add Book");
+		mntmAddBook.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				BookAddInterFrm bookAddInterFrm = new BookAddInterFrm();
+				bookAddInterFrm.setVisible(true);
+				desktopPane.add(bookAddInterFrm);
+			}
+		});
 		mntmAddBook.setIcon(new ImageIcon(MainFrame.class.getResource("/images/add.png")));
 		mnNewMenu_3.add(mntmAddBook);
 		
 		JMenuItem mntmMaitainBook = new JMenuItem("Maitain Book");
+		mntmMaitainBook.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				BookManageInterFrm bookManageInterFrm = new BookManageInterFrm();
+				bookManageInterFrm.setVisible(true);
+				desktopPane.add(bookManageInterFrm);
+			}
+		});
 		mntmMaitainBook.setIcon(new ImageIcon(MainFrame.class.getResource("/images/edit.png")));
 		mnNewMenu_3.add(mntmMaitainBook);
 		

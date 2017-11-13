@@ -123,7 +123,7 @@ public class BookGenreAddInterFrm extends JInternalFrame {
 					.addGap(30))
 		);
 		getContentPane().setLayout(groupLayout);
-		//make the of TextArea visible
+		//Set border: make the border of the TextArea visible
 		bookGenreDescTxt.setBorder(new LineBorder(new java.awt.Color(127, 157, 185),1,false));
 
 	}

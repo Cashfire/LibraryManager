@@ -46,6 +46,11 @@ public class BookGenre {
 	public void setBookGenreDesc(String bookGenreDesc) {
 		this.bookGenreDesc = bookGenreDesc;
 	}
+
+	@Override
+	public String toString() {
+		return bookGenreName;
+	}
 	
 	
 
