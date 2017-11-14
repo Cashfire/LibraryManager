@@ -17,6 +17,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
@@ -27,6 +28,11 @@ import com.ggcc.model.BookGenre;
 import com.ggcc.util.DbUtil;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JRadioButton;
+import javax.swing.ButtonGroup;
+import javax.swing.JTextArea;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class BookManageInterFrm extends JInternalFrame {
 	private JTable bookTable;
@@ -37,6 +43,17 @@ public class BookManageInterFrm extends JInternalFrame {
 	private DbUtil dbUtil = new DbUtil();
 	private BookGenreDao bookGenreDao = new BookGenreDao();
 	private BookDao bookDao = new BookDao();
+	
+	private JTextField idTxt;
+	private JTextField bookNameTxt;
+	private JTextField priceTxt;
+	private JTextField authorTxt;
+	private JRadioButton maleJrb;
+	private JRadioButton femaleJrb;
+	private JTextArea bookDescTxt;
+	private JComboBox bookGenreJcb;
+	
+	private final ButtonGroup buttonGroup = new ButtonGroup();
 	/**
 	 * Launch the application.
 	 */
@@ -60,21 +77,26 @@ public class BookManageInterFrm extends JInternalFrame {
 		setClosable(true);
 		setIconifiable(true);
 		setTitle("Book Management");
-		setBounds(100, 100, 750, 476);
+		setBounds(100, 100, 750, 515);
 		
 		JScrollPane scrollPane = new JScrollPane();
 		
 		JPanel panel = new JPanel();
 		panel.setBorder(new TitledBorder(null, "Search Conditions", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		
+		JPanel panel_1 = new JPanel();
+		panel_1.setBorder(new TitledBorder(null, "Table Operation", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
 					.addGap(27)
 					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
-						.addComponent(scrollPane, Alignment.LEADING)
-						.addComponent(panel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 609, Short.MAX_VALUE))
-					.addGap(98))
+						.addComponent(panel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 601, Short.MAX_VALUE)
+						.addGroup(Alignment.LEADING, groupLayout.createParallelGroup(Alignment.TRAILING, false)
+							.addComponent(scrollPane, Alignment.LEADING)
+							.addComponent(panel_1, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 593, Short.MAX_VALUE)))
+					.addContainerGap(98, Short.MAX_VALUE))
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -83,8 +105,135 @@ public class BookManageInterFrm extends JInternalFrame {
 					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE)
 					.addGap(18)
 					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 159, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(201, Short.MAX_VALUE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 208, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(26, Short.MAX_VALUE))
 		);
+		
+		JLabel lblId = new JLabel("id:");
+		
+		idTxt = new JTextField();
+		idTxt.setColumns(10);
+		
+		JLabel lblBookName_1 = new JLabel("Book name:");
+		
+		bookNameTxt = new JTextField();
+		bookNameTxt.setColumns(10);
+		
+		JLabel lblGender = new JLabel("Gender:");
+		
+		JLabel lblPrice = new JLabel("Price:");
+		
+		priceTxt = new JTextField();
+		priceTxt.setColumns(10);
+		
+		JLabel lblAuthor_1 = new JLabel("Author:");
+		
+		authorTxt = new JTextField();
+		authorTxt.setColumns(10);
+		
+		JLabel lblGenre_1 = new JLabel("Genre:");
+		
+		maleJrb = new JRadioButton("M");
+		maleJrb.setSelected(true);
+		buttonGroup.add(maleJrb);
+		
+		femaleJrb = new JRadioButton("F");
+		buttonGroup.add(femaleJrb);
+		
+		bookGenreJcb = new JComboBox();
+		
+		JButton btnModify = new JButton("Modify");
+		btnModify.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnModify.setIcon(new ImageIcon(BookManageInterFrm.class.getResource("/images/modify.png")));
+		
+		JButton btnDelete = new JButton("Delete");
+		btnDelete.setIcon(new ImageIcon(BookManageInterFrm.class.getResource("/images/delete.png")));
+		
+		JLabel lblBookDescriptoin = new JLabel("Book descriptoin:");
+		
+		bookDescTxt = new JTextArea();
+		GroupLayout gl_panel_1 = new GroupLayout(panel_1);
+		gl_panel_1.setHorizontalGroup(
+			gl_panel_1.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_1.createSequentialGroup()
+					.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_panel_1.createSequentialGroup()
+							.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING, false)
+								.addGroup(gl_panel_1.createSequentialGroup()
+									.addComponent(lblId)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(idTxt, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
+									.addGap(47)
+									.addComponent(lblBookName_1))
+								.addGroup(gl_panel_1.createSequentialGroup()
+									.addComponent(lblPrice)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(priceTxt, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+									.addComponent(lblAuthor_1)))
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING, false)
+								.addComponent(authorTxt)
+								.addComponent(bookNameTxt, GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE)))
+						.addGroup(gl_panel_1.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(btnModify)
+							.addGap(59)
+							.addComponent(btnDelete)))
+					.addPreferredGap(ComponentPlacement.RELATED, 51, Short.MAX_VALUE)
+					.addGroup(gl_panel_1.createParallelGroup(Alignment.TRAILING)
+						.addGroup(gl_panel_1.createSequentialGroup()
+							.addComponent(lblGender)
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(maleJrb)
+							.addGap(18)
+							.addComponent(femaleJrb))
+						.addGroup(gl_panel_1.createSequentialGroup()
+							.addComponent(lblGenre_1)
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(bookGenreJcb, GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE)))
+					.addGap(62))
+				.addGroup(gl_panel_1.createSequentialGroup()
+					.addComponent(lblBookDescriptoin)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(bookDescTxt, GroupLayout.PREFERRED_SIZE, 452, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap())
+		);
+		gl_panel_1.setVerticalGroup(
+			gl_panel_1.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_1.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_panel_1.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblId)
+						.addComponent(idTxt, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblBookName_1)
+						.addComponent(femaleJrb)
+						.addComponent(maleJrb)
+						.addComponent(bookNameTxt, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblGender))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGroup(gl_panel_1.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblPrice)
+						.addComponent(priceTxt, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblAuthor_1)
+						.addComponent(authorTxt, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(bookGenreJcb, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblGenre_1))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGroup(gl_panel_1.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblBookDescriptoin)
+						.addComponent(bookDescTxt, GroupLayout.PREFERRED_SIZE, 58, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+					.addGroup(gl_panel_1.createParallelGroup(Alignment.BASELINE)
+						.addComponent(btnModify)
+						.addComponent(btnDelete))
+					.addContainerGap())
+		);
+		panel_1.setLayout(gl_panel_1);
 		
 		JLabel lblBookName = new JLabel("Book name:");
 		
@@ -142,6 +291,13 @@ public class BookManageInterFrm extends JInternalFrame {
 		panel.setLayout(gl_panel);
 		
 		bookTable = new JTable();
+		bookTable.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent met) {
+				bookTableMousePressed(met);
+			}
+		});
+		
 		bookTable.setModel(new DefaultTableModel(
 			new Object[][] {
 			},
@@ -164,11 +320,46 @@ public class BookManageInterFrm extends JInternalFrame {
 		bookTable.getColumnModel().getColumn(5).setPreferredWidth(222);
 		scrollPane.setViewportView(bookTable);
 		getContentPane().setLayout(groupLayout);
+		
+		//Set border: make the border of the TextArea visible
+		bookDescTxt.setBorder(new LineBorder(new java.awt.Color(127, 157, 185),1,false));
 
 		this.fillBookGenre("search");
+		this.fillBookGenre("modify");
 		this.fillTable(new Book());
 	}
 	
+	/**
+	 * MousePressed event handler
+	 * show all the info to the Jpanel below from the selected row of the Jtable above.
+	 * @param met
+	 */
+	private void bookTableMousePressed(MouseEvent met) {
+		int row = this.bookTable.getSelectedRow();
+		//From bookTable("id", "Book name", "Author", "Gender", "Price", "Book description", "Genre")
+		this.idTxt.setText((String) bookTable.getValueAt(row, 0));
+		this.bookNameTxt.setText((String) bookTable.getValueAt(row, 1));
+		this.authorTxt.setText((String)bookTable.getValueAt(row, 2));
+		String gender = (String) bookTable.getValueAt(row, 3);
+		if("male".equals(gender)){
+			this.maleJrb.setSelected(true);
+		}else if("female".equals(gender)){
+			this.femaleJrb.setSelected(true);
+		}
+		this.priceTxt.setText((String) bookTable.getValueAt(row, 4)); 
+		this.bookDescTxt.setText((String)bookTable.getValueAt(row, 5));
+		//we already use this.fillBookGenre("modify") to fill the bookGenreJcb
+		//now we are going to select the book genre from the bookGenreJcb JComboBox
+		String bookGenreName = (String) this.bookTable.getValueAt(row, 6);
+		int n = this.bookGenreJcb.getItemCount(); //4 genres
+		for(int i=0; i<n ; i++){
+			BookGenre item = (BookGenre) this.bookGenreJcb.getItemAt(i);
+			if(item.getBookGenreName().equals(bookGenreName)){
+				this.bookGenreJcb.setSelectedIndex(i);
+			}
+		}
+	}
+
 	/**
 	 * Book searching event handler
 	 * @param e
@@ -203,9 +394,8 @@ public class BookManageInterFrm extends JInternalFrame {
 				bookGenre.setId(rs.getInt("id"));
 				if("search".equals(genre)){
 					this.s_bookGenreJcb.addItem(bookGenre);
-				}else if("modify".equals(genre)){
-					
-					
+				}else if("modify".equals(genre)){  //????????????????
+					this.bookGenreJcb.addItem(bookGenre);		     
 				}
 			}
 		}catch(Exception e){

@@ -56,6 +56,34 @@ public class BookDao {
 		PreparedStatement pstmt = con.prepareStatement(sb.toString());
 		return pstmt.executeQuery();
 	}
+	
+	/**
+	 * Delete a book
+	 * @param con
+	 * @param id
+	 * @return
+	 * @throws Exception
+	 */
+	public int delete(Connection con, String id)throws Exception{
+		String sql = "delete from t_book where id = ?";
+		PreparedStatement pstmt = con.prepareStatement(sql);
+		pstmt.setString(1, id);
+		return pstmt.executeUpdate();
+	}
+	
+	public int update(Connection con, Book book)throws Exception{
+		String sql = "update t_book set bookName=?,author=?,gender=?,price=?bookDesc=?,bookGenreId=? where id=?";
+		PreparedStatement pstmt = con.prepareStatement(sql);
+		pstmt.setString(1, book.getBookName());
+		pstmt.setString(2, book.getAuthor());
+		pstmt.setString(3, book.getGender());
+		pstmt.setString(4, Float.toString(book.getPrice()));
+		pstmt.setString(5, book.getBookDesc());
+		pstmt.setInt(6, book.getBookGenreId());
+		pstmt.setInt(7, book.getId());
+		return pstmt.executeUpdate();
+		
+	}
 }
 
 
