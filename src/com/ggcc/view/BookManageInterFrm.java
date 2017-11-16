@@ -12,6 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -26,6 +27,8 @@ import com.ggcc.dal.BookGenreDao;
 import com.ggcc.model.Book;
 import com.ggcc.model.BookGenre;
 import com.ggcc.util.DbUtil;
+import com.ggcc.util.StringUtil;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JRadioButton;
@@ -146,11 +149,17 @@ public class BookManageInterFrm extends JInternalFrame {
 		JButton btnModify = new JButton("Modify");
 		btnModify.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				bookModifyActionPerformed(e);
 			}
 		});
 		btnModify.setIcon(new ImageIcon(BookManageInterFrm.class.getResource("/images/modify.png")));
 		
 		JButton btnDelete = new JButton("Delete");
+		btnDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				bookDeleteActionPerformed(evt);
+			}
+		});
 		btnDelete.setIcon(new ImageIcon(BookManageInterFrm.class.getResource("/images/delete.png")));
 		
 		JLabel lblBookDescriptoin = new JLabel("Book descriptoin:");
@@ -330,6 +339,126 @@ public class BookManageInterFrm extends JInternalFrame {
 	}
 	
 	/**
+	 * Event handler of deleting a book
+	 */
+	private void bookDeleteActionPerformed(ActionEvent evt) {
+		//Make sure the JPane below must has a id before delete
+		String id = idTxt.getText();
+		if(StringUtil.isEmpty(id)){
+			JOptionPane.showMessageDialog(null, "Please choose the book you want to delete.");
+			return;
+		}
+		int n = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this item?");
+		if(n==0){
+			Connection con = null;
+			try{
+				con = dbUtil.GetCon();
+				int deletNum = bookDao.delete(con, id);
+				if(deletNum == 1){
+					JOptionPane.showMessageDialog(null, "Delete success");
+					this.resetValue();
+					this.fillTable(new Book());
+				}else{
+					JOptionPane.showMessageDialog(null, "Delete failure");
+				}
+			}catch(Exception e){
+				e.printStackTrace();
+				JOptionPane.showMessageDialog(null, "Delete failure");
+			}finally{
+				try {
+					dbUtil.closeConnection(con);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+	}
+
+	/**
+	 * event handler of modifying book 
+	 */
+	private void bookModifyActionPerformed(ActionEvent evt) {
+		String id = this.idTxt.getText();
+		String bookName = this.bookNameTxt.getText();
+		String author = this.authorTxt.getText();
+		String price = this.priceTxt.getText();
+		String bookDesc = this.bookDescTxt.getText();
+		if(StringUtil.isEmpty(id)){
+			JOptionPane.showMessageDialog(null, "Please choose the id you want to modify.");
+			return;
+		}
+		if(StringUtil.isEmpty(bookName)){
+			JOptionPane.showMessageDialog(null, "Please enter a book name");
+			return;
+		}
+		if(StringUtil.isEmpty(author)){
+			JOptionPane.showMessageDialog(null, "Please enter the author");
+			return;
+		}
+		if(StringUtil.isEmpty(price)){
+			JOptionPane.showMessageDialog(null, "Please enter the price");
+			return;
+		}
+		
+		String gender = "";
+		if(maleJrb.isSelected()){
+			gender = "male";
+		}else if(femaleJrb.isSelected()){
+			gender = "female";
+		}
+		
+		BookGenre bookGenre = (BookGenre) bookGenreJcb.getSelectedItem();
+		int bookGenreId = bookGenre.getId();
+		
+		Book book = new Book(Integer.parseInt(id), bookName, author, gender,Float.parseFloat(price), bookGenreId, bookDesc);
+		
+		Connection con = null;
+		try{
+			con = dbUtil.GetCon();
+			//update the t_book in SQL
+			int modifyNum = bookDao.update(con, book);
+			
+			if(modifyNum ==1){
+				JOptionPane.showMessageDialog(null, "Modify Success");
+				//also clear the bookTable in the Jtable below????
+				//and update the scrollPane above.
+				this.resetValue(); 
+				this.fillTable(new Book());
+			}else{
+				JOptionPane.showMessageDialog(null, "Modify failure.");
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "Modify failure");
+		}finally{
+			try {
+				dbUtil.closeConnection(con);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+
+	/**
+	 * Reset the input of BookAddInterFrm 
+	*/
+	private void resetValue() {
+		this.idTxt.setText("");
+		this.bookNameTxt.setText("");
+		this.authorTxt.setText("");
+		this.priceTxt.setText("");
+		this.bookDescTxt.setText("");
+		this.maleJrb.setSelected(true);
+		this.bookDescTxt.setText("");
+		if(this.bookGenreJcb.getItemCount() > 0){
+			this.bookGenreJcb.setSelectedIndex(0);
+		}
+		
+	}		
+		
+	/**
 	 * MousePressed event handler
 	 * show all the info to the Jpanel below from the selected row of the Jtable above.
 	 * @param met
@@ -382,7 +511,9 @@ public class BookManageInterFrm extends JInternalFrame {
 		try{
 			con = dbUtil.GetCon();
 			ResultSet rs = bookGenreDao.list(con,new BookGenre());
-			if("search".equals(genre)){//?????????
+			//if input is "search", add one item to the s_bookGenreJcb in the ScrollPane above.
+			//if input is "modify", do nothing here.
+			if("search".equals(genre)){
 				bookGenre = new BookGenre();
 				bookGenre.setBookGenreName("Please choose one");
 				bookGenre.setId(-1);
@@ -392,10 +523,13 @@ public class BookManageInterFrm extends JInternalFrame {
 				bookGenre = new BookGenre();
 				bookGenre.setBookGenreName(rs.getString("bookGenreName"));
 				bookGenre.setId(rs.getInt("id"));
+				//if input is "search", add each item from rs to the s_bookGenreJcb in the ScrollPane above.
 				if("search".equals(genre)){
 					this.s_bookGenreJcb.addItem(bookGenre);
-				}else if("modify".equals(genre)){  //????????????????
-					this.bookGenreJcb.addItem(bookGenre);		     
+				}else if("modify".equals(genre)){  
+					this.bookGenreJcb.addItem(bookGenre);
+					//if input is "modify", add each item from rs to the bookGenreJcb in the JPanel below.
+
 				}
 			}
 		}catch(Exception e){

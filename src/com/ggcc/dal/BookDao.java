@@ -72,7 +72,7 @@ public class BookDao {
 	}
 	
 	public int update(Connection con, Book book)throws Exception{
-		String sql = "update t_book set bookName=?,author=?,gender=?,price=?bookDesc=?,bookGenreId=? where id=?";
+		String sql = "update t_book set bookName=?,author=?,gender=?,price=?,bookDesc=?,bookGenreId=? where id=?";
 		PreparedStatement pstmt = con.prepareStatement(sql);
 		pstmt.setString(1, book.getBookName());
 		pstmt.setString(2, book.getAuthor());
@@ -81,8 +81,20 @@ public class BookDao {
 		pstmt.setString(5, book.getBookDesc());
 		pstmt.setInt(6, book.getBookGenreId());
 		pstmt.setInt(7, book.getId());
-		return pstmt.executeUpdate();
-		
+		//System.out.println(pstmt);
+		return pstmt.executeUpdate();	
+	}
+	
+	/**
+	 * Before delete, check whether the bookGenre has book.
+	 * 
+	 */
+	public boolean existBookByBookGenreId(Connection con, String bookGenreId)throws Exception{
+		String sql = "select * from t_book where bookGenreId=?";
+		PreparedStatement pstmt = con.prepareStatement(sql);
+		pstmt.setString(1, bookGenreId);
+		ResultSet rs = pstmt.executeQuery();
+		return rs.next();  //if it has, then return true
 	}
 }
 

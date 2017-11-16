@@ -33,6 +33,17 @@ public class Book {
 		this.bookDesc = bookDesc;
 	}
 
+	public Book(int id, String bookName, String author, String gender, float price, Integer bookGenreId,
+			String bookDesc) {
+		super();
+		this.id = id;
+		this.bookName = bookName;
+		this.author = author;
+		this.gender = gender;
+		this.price = price;
+		this.bookGenreId = bookGenreId;
+		this.bookDesc = bookDesc;
+	}
 
 	public int getId() {
 		return id;

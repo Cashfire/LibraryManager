@@ -14,6 +14,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+import com.ggcc.dal.BookDao;
 import com.ggcc.dal.BookGenreDao;
 import com.ggcc.model.BookGenre;
 import com.ggcc.util.DbUtil;
@@ -235,6 +236,13 @@ public class BookGenreManagementInterFrm extends JInternalFrame {
 				Connection con = null;
 				try{
 					con = dbUtil.GetCon();
+					//Check whether the bookGenre has any book in it.
+					BookDao bookDao = new BookDao();
+					boolean flag = bookDao.existBookByBookGenreId(con, id);
+					if(flag){
+						JOptionPane.showMessageDialog(null, "Cannot delete a book genre that still has any book in it.");
+						return;
+					}
 					int deletNum = bookGenreDao.delete(con, id);
 					if(deletNum == 1){
 						JOptionPane.showMessageDialog(null, "Delete success");
@@ -275,6 +283,7 @@ public class BookGenreManagementInterFrm extends JInternalFrame {
 				return;
 			}
 			BookGenre bookGenre = new BookGenre(Integer.parseInt(id), bookGenreName, bookGenreDesc);		
+			
 			Connection con = null;
 			try{
 				con = dbUtil.GetCon();

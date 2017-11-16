@@ -142,6 +142,7 @@ public class BookGenreAddInterFrm extends JInternalFrame {
 			int n = bookGenreDao.add(con, bookGenre);
 			if(n==1){
 				JOptionPane.showMessageDialog(null, "Book genre add succeess");
+				this.resetValue();
 			}else{
 				JOptionPane.showMessageDialog(null, "Book genre add failure");
 			}
